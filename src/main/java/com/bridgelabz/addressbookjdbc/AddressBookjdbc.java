@@ -51,4 +51,27 @@ public class AddressBookjdbc {
 		}
 		return list;
 	}
+	
+	public static int updateContactInformation(String Department_Type, String firstName, String lastName) {
+		String query = String.format(
+				"UPDATE address_book SET Department_Type='%s' WHERE firstName='%s' and lastName='%s';", Department_Type,
+				firstName, lastName);
+		try {
+
+			Class.forName("com.mysql.jdbc.Driver");
+			System.out.println("Driver loaded!...");
+			Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			System.out.println("connection success");
+			Statement stmt = con.createStatement();
+			int rs = stmt.executeUpdate(query);
+			return rs;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		// listDrivers()
+		catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
 }

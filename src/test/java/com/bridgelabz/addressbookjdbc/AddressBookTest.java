@@ -15,4 +15,10 @@ public class AddressBookTest {
 		List<AddressData> addresstest = AddressBookjdbc.retrieveAlltheEntriesInAddressBook();
 		Assert.assertEquals(8, addresstest.size());
 	}
+	
+	@Test 
+	public void updateContactInformationTest() {
+		int contact = AddressBookjdbc.updateContactInformation("Sales","Goutham","Y");
+		Assert.assertEquals(1, contact);
+	}
 }
