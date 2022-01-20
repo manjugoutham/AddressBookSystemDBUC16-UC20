@@ -108,4 +108,28 @@ public class AddressBookjdbc {
 		return list;
 
 	}
+	
+	public static List<AddressData> retrieveNumberOfContactsInDbByCityorState(String city) {
+
+		try {
+			Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			PreparedStatement pstmt = con.prepareStatement("SELECT *  FROM address_book WHERE city=?");
+			pstmt.setString(1, city);
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				list.add(new AddressData(rs.getString("firstName"), rs.getString("lastName"), rs.getString("address"),
+						rs.getString("Department_Type"), rs.getString("city"), rs.getString("state"),
+						rs.getString("email"), rs.getInt("phoneNumber"), rs.getInt("zip")));
+				System.out.println(list.size());
+				// System.out.println("City = " + city + " \nstate = " + state);
+
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 }
