@@ -21,4 +21,12 @@ public class AddressBookTest {
 		int contact = AddressBookjdbc.updateContactInformation("Sales","Goutham","Y");
 		Assert.assertEquals(1, contact);
 	}
+	
+	@Test
+	public void retrieveContactFromDatabaseTest() {
+		LocalDate start_date = LocalDate.of(2021,10,10);
+		LocalDate end_date = LocalDate.of(2022,01,05);
+		List<AddressData> dateresult = AddressBookjdbc.retrieveContactFromDatabase(start_date,end_date);
+		Assert.assertEquals(3, dateresult.size());
+	}
 }

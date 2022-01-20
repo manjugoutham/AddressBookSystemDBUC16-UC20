@@ -74,4 +74,38 @@ public class AddressBookjdbc {
 		}
 		return 0;
 	}
+	
+	public static List<AddressData> retrieveContactFromDatabase(LocalDate start_date, LocalDate end_date) {
+
+		String query = String.format("select * FROM address_book where start_date BETWEEN '%s' AND '%s';",
+				Date.valueOf(start_date), Date.valueOf(end_date));
+		List<AddressData> addressdata = new ArrayList<>();
+		try {
+
+			System.out.println("Driver loaded!...");
+			Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			System.out.println("connection success");
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next())
+				list.add(new AddressData(rs.getString("firstName"), rs.getString("lastName"), rs.getString("address"),
+						rs.getString("Department_Type"), rs.getString("city"), rs.getString("state"),
+						rs.getString("email"), rs.getInt("phoneNumber"), rs.getInt("zip")));
+			System.out.println(list.size());
+			addressdata.forEach(System.out::println);
+			stmt.close();
+			rs.close();
+			con.close();
+
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+
+	}
 }
