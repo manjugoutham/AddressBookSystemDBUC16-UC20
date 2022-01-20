@@ -132,4 +132,29 @@ public class AddressBookjdbc {
 		}
 		return list;
 	}
+	
+public static int addDataIntoAddressBookTransaction(String firstName, String lastName,String address,String Department_Type,LocalDate start_date, String city, String state,int zip, int phoneNumber,String email) throws SQLException  {
+		
+		String query = String.format("INSERT INTO address_book (`firstName`, `lastName`,`address`,`Department_Type`,`start_date`, `city`, `state`,`zip`, `phoneNumber`,`email`) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+                firstName, lastName,address,Department_Type,start_date, city, state, zip, phoneNumber, email);
+		System.out.println(query);
+		Connection con = null;
+		
+		int rs = 0;
+		try {
+			
+			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			con.setAutoCommit(false);
+			Statement statement = con.createStatement();
+			rs = statement.executeUpdate(query);
+			
+			con.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();	
+			con.rollback();
+		}
+		return rs;
+
+	}
 }
