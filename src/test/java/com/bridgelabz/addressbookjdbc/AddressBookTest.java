@@ -14,31 +14,4 @@ public class AddressBookTest {
 		List<AddressData> addresstest = AddressBookjdbc.retrieveAlltheEntriesInAddressBook();
 		Assert.assertEquals(8, addresstest.size());
 	}
-
-	@Test
-	public void updateContactInformationTest() {
-		int contact = AddressBookjdbc.updateContactInformation("Sales", "Goutham", "Y");
-		Assert.assertEquals(1, contact);
-	}
-
-	@Test
-	public void retrieveContactFromDatabaseTest() {
-		LocalDate start_date = LocalDate.of(2021, 10, 10);
-		LocalDate end_date = LocalDate.of(2022, 01, 05);
-		List<AddressData> dateresult = AddressBookjdbc.retrieveContactFromDatabase(start_date, end_date);
-		Assert.assertEquals(3, dateresult.size());
-	}
-
-	@Test
-	public void retrieveNumberOfContactsInDbByCityorStateTest() throws SQLException {
-		List<AddressData> cityorstatetest = AddressBookjdbc.retrieveNumberOfContactsInDbByCityorState("kolar");
-		Assert.assertEquals(1, cityorstatetest.size());
-	}
-
-	@Test 
-	public void addDataIntoAddressBookTransactionTest() throws SQLException {
-		LocalDate start_date = LocalDate.of(2019,03, 01);
-		int result = AddressBookjdbc.addDataIntoAddressBookTransaction("Allenraj","R","Bnaglore","MarketTeam",start_date, "KGF","Karnataka",565566,987654322,"allen12@gmail.com");
-		Assert.assertEquals(1, result);
-	}
 }
