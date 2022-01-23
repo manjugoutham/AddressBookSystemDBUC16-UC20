@@ -57,8 +57,6 @@ public class AddressBookjdbc {
 		}
 		return list;
 	}
-<<<<<<< HEAD
-=======
 	
 	/**
 	 * Ability to update the Contact Information in the address book for a person and ensure that the Contact Information in the
@@ -91,5 +89,120 @@ public class AddressBookjdbc {
 		}
 		return 0;
 	}
->>>>>>> UC17
+	
+	/**
+	 * UC 18 : Ability to Retrieve Contacts from the Database that were added in a particular
+	 * period - Use ADO.NET
+	 * @param start_date.
+	 * @param end_date.
+	 * @return It returns the Address Book data in list.
+	 */
+
+	public static List<AddressData> retrieveContactFromDatabase(LocalDate start_date, LocalDate end_date) {
+
+		String query = String.format("select * FROM address_book where start_date BETWEEN '%s' AND '%s';",
+				Date.valueOf(start_date), Date.valueOf(end_date));
+		List<AddressData> addressdata = new ArrayList<>();
+		try {
+
+			System.out.println("Driver loaded!...");
+			Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			System.out.println("connection success");
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while (rs.next())
+				list.add(new AddressData(rs.getString("firstName"), rs.getString("lastName"), rs.getString("address"),
+						rs.getString("Department_Type"), rs.getString("city"), rs.getString("state"),
+						rs.getString("email"), rs.getInt("phoneNumber"), rs.getInt("zip")));
+			System.out.println(list.size());
+			addressdata.forEach(System.out::println);
+//			stmt.close();
+//			rs.close();
+			con.close();
+
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+
+	}
+	
+	/**
+	 * Ability to Retrieve number of Contacts in the Database by City or State
+	 * @param city
+	 * @return It returns the Address Book data in list.
+	 */
+
+	public static List<AddressData> retrieveNumberOfContactsInDbByCityorState(String city) {
+
+		try {
+			Connection con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			PreparedStatement pstmt = con.prepareStatement("SELECT *  FROM address_book WHERE city=?");
+			pstmt.setString(1, city);
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				list.add(new AddressData(rs.getString("firstName"), rs.getString("lastName"), rs.getString("address"),
+						rs.getString("Department_Type"), rs.getString("city"), rs.getString("state"),
+						rs.getString("email"), rs.getInt("phoneNumber"), rs.getInt("zip")));
+				System.out.println(list.size());
+				// System.out.println("City = " + city + " \nstate = " + state);
+
+			}
+			rs.close();
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	/**
+	 * Ability to Add new Contact to the Address Book Database
+	 * @param firstName
+	 * @param lastName
+	 * @param address
+	 * @param Department_Type
+	 * @param start_date
+	 * @param city
+	 * @param state
+	 * @param zip
+	 * @param phoneNumber
+	 * @param email
+	 * @return It returns the new contact person details in Address Book data.
+	 * @throws SQLException
+	 */
+
+	public static int addDataIntoAddressBookTransaction(String firstName, String lastName, String address,
+			String Department_Type, LocalDate start_date, String city, String state, int zip, int phoneNumber,
+			String email) throws SQLException {
+
+		String query = String.format(
+				"INSERT INTO address_book (`firstName`, `lastName`,`address`,`Department_Type`,`start_date`, `city`, `state`,`zip`, `phoneNumber`,`email`) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+				firstName, lastName, address, Department_Type, start_date, city, state, zip, phoneNumber, email);
+		System.out.println(query);
+		Connection con = null;
+
+		int rs = 0;
+		try {
+
+			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+			con.setAutoCommit(false);
+			Statement statement = con.createStatement();
+			rs = statement.executeUpdate(query);
+
+			con.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			con.rollback();
+		}
+		return rs;
+
+	}
 }
