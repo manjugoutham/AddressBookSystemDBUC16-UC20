@@ -17,6 +17,12 @@ public class AddressBookjdbc {
 	static String URL = "jdbc:mysql://localhost:3306/address_book_database?characterEncoding=utf8";
 	static String USERNAME = "root";
 	static String PASSWORD = "Tham12@2";
+	
+	/**
+	 * Ability for the AddressBook Service to retrieve all the Entries from the DB
+	 * @param It retrieve the All entries in Address Book.
+	 * @return It returns the Address Book data in list.
+	 */
 
 	public static List<AddressData> retrieveAlltheEntriesInAddressBook() {
 
@@ -52,6 +58,15 @@ public class AddressBookjdbc {
 		return list;
 	}
 	
+	/**
+	 * Ability to update the Contact Information in the address book for a person and ensure that the Contact Information in the
+	 * memory is in Sync with the DB
+	 * @param Department_Type
+	 * @param firstName
+	 * @param lastName
+	 * @return
+	 */
+
 	public static int updateContactInformation(String Department_Type, String firstName, String lastName) {
 		String query = String.format(
 				"UPDATE address_book SET Department_Type='%s' WHERE firstName='%s' and lastName='%s';", Department_Type,
@@ -75,6 +90,14 @@ public class AddressBookjdbc {
 		return 0;
 	}
 	
+	/**
+	 * UC 18 : Ability to Retrieve Contacts from the Database that were added in a particular
+	 * period - Use ADO.NET
+	 * @param start_date.
+	 * @param end_date.
+	 * @return It returns the Address Book data in list.
+	 */
+
 	public static List<AddressData> retrieveContactFromDatabase(LocalDate start_date, LocalDate end_date) {
 
 		String query = String.format("select * FROM address_book where start_date BETWEEN '%s' AND '%s';",
@@ -93,8 +116,8 @@ public class AddressBookjdbc {
 						rs.getString("email"), rs.getInt("phoneNumber"), rs.getInt("zip")));
 			System.out.println(list.size());
 			addressdata.forEach(System.out::println);
-			stmt.close();
-			rs.close();
+//			stmt.close();
+//			rs.close();
 			con.close();
 
 			Class.forName("com.mysql.jdbc.Driver");
@@ -109,6 +132,12 @@ public class AddressBookjdbc {
 
 	}
 	
+	/**
+	 * Ability to Retrieve number of Contacts in the Database by City or State
+	 * @param city
+	 * @return It returns the Address Book data in list.
+	 */
+
 	public static List<AddressData> retrieveNumberOfContactsInDbByCityorState(String city) {
 
 		try {
@@ -133,28 +162,48 @@ public class AddressBookjdbc {
 		return list;
 	}
 	
-public static int addDataIntoAddressBookTransaction(String firstName, String lastName,String address,String Department_Type,LocalDate start_date, String city, String state,int zip, int phoneNumber,String email) throws SQLException  {
-		
-		String query = String.format("INSERT INTO address_book (`firstName`, `lastName`,`address`,`Department_Type`,`start_date`, `city`, `state`,`zip`, `phoneNumber`,`email`) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
-                firstName, lastName,address,Department_Type,start_date, city, state, zip, phoneNumber, email);
+	/**
+	 * Ability to Add new Contact to the Address Book Database
+	 * @param firstName
+	 * @param lastName
+	 * @param address
+	 * @param Department_Type
+	 * @param start_date
+	 * @param city
+	 * @param state
+	 * @param zip
+	 * @param phoneNumber
+	 * @param email
+	 * @return It returns the new contact person details in Address Book data.
+	 * @throws SQLException
+	 */
+
+	public static int addDataIntoAddressBookTransaction(String firstName, String lastName, String address,
+			String Department_Type, LocalDate start_date, String city, String state, int zip, int phoneNumber,
+			String email) throws SQLException {
+
+		String query = String.format(
+				"INSERT INTO address_book (`firstName`, `lastName`,`address`,`Department_Type`,`start_date`, `city`, `state`,`zip`, `phoneNumber`,`email`) VALUES ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
+				firstName, lastName, address, Department_Type, start_date, city, state, zip, phoneNumber, email);
 		System.out.println(query);
 		Connection con = null;
-		
+
 		int rs = 0;
 		try {
-			
+
 			con = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 			con.setAutoCommit(false);
 			Statement statement = con.createStatement();
 			rs = statement.executeUpdate(query);
-			
+
 			con.commit();
 
 		} catch (Exception e) {
-			e.printStackTrace();	
+			e.printStackTrace();
 			con.rollback();
 		}
 		return rs;
 
 	}
 }
+
