@@ -17,6 +17,12 @@ public class AddressBookjdbc {
 	static String URL = "jdbc:mysql://localhost:3306/address_book_database?characterEncoding=utf8";
 	static String USERNAME = "root";
 	static String PASSWORD = "Tham12@2";
+	
+	/**
+	 * Ability for the AddressBook Service to retrieve all the Entries from the DB
+	 * @param It retrieve the All entries in Address Book.
+	 * @return It returns the Address Book data in list.
+	 */
 
 	public static List<AddressData> retrieveAlltheEntriesInAddressBook() {
 
@@ -52,6 +58,15 @@ public class AddressBookjdbc {
 		return list;
 	}
 	
+	/**
+	 * Ability to update the Contact Information in the address book for a person and ensure that the Contact Information in the
+	 * memory is in Sync with the DB
+	 * @param Department_Type
+	 * @param firstName
+	 * @param lastName
+	 * @return
+	 */
+
 	public static int updateContactInformation(String Department_Type, String firstName, String lastName) {
 		String query = String.format(
 				"UPDATE address_book SET Department_Type='%s' WHERE firstName='%s' and lastName='%s';", Department_Type,
