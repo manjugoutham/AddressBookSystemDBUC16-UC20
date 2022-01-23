@@ -17,6 +17,12 @@ public class AddressBookjdbc {
 	static String URL = "jdbc:mysql://localhost:3306/address_book_database?characterEncoding=utf8";
 	static String USERNAME = "root";
 	static String PASSWORD = "Tham12@2";
+	
+	/**
+	 * Ability for the AddressBook Service to retrieve all the Entries from the DB
+	 * @param It retrieve the All entries in Address Book.
+	 * @return It returns the Address Book data in list.
+	 */
 
 	public static List<AddressData> retrieveAlltheEntriesInAddressBook() {
 
